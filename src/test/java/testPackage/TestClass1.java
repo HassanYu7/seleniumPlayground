@@ -20,10 +20,16 @@ public class TestClass1 {
     }
 
     @Test
-    public void testSubmitButton() {
+    public void testNameOfSubmitButton() {
         WebElement submitButton = driver.findElement(By.cssSelector("button"));
         String buttonText = submitButton.getText();
         Assertions.assertEquals("Submit", buttonText, "Button text is not 'submit'");
+    }
+
+    @Test
+    public void verifyPageTitleIsCorrect() {
+        var pageTitleName = driver.getTitle();
+        Assertions.assertEquals("Web form",pageTitleName);
     }
 
     @AfterAll
