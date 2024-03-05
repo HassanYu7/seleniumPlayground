@@ -1,14 +1,11 @@
 package tasks;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Alert;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class LoginSection {
 
     WebDriver driver;
@@ -19,46 +16,51 @@ public class LoginSection {
         driver.get("https://www.demo.guru99.com/V4/");
     }
 
+    @AfterEach
+    public void tearDown() {
+        driver.quit();
+    }
+
     @Test
+    @Order(1)
+    @DisplayName("TC1: Valid Login")
     public void testValidLogin() {
-        driver.findElement(By.name("uid")).sendKeys("mngr554581");
-        driver.findElement(By.name("password")).sendKeys("aqejysU");
-        driver.findElement(By.name("btnLogin")).click();
+        login("mngr554581", "aqejysU");
         Assertions.assertEquals("Guru99 Bank Manager HomePage", driver.getTitle());
     }
 
-    private String getMessage(){
-        String alertMessage = driver.switchTo().alert().getText();
-        return alertMessage;
-    }
-
     @Test
+    @Order(2)
+    @DisplayName("TC2: Invalid UserID and Valid Password")
     public void testInvalidUseridAndValidPassword() {
-        driver.findElement(By.name("uid")).sendKeys("mngr554d581");
-        driver.findElement(By.name("password")).sendKeys("aqejysU");
-        driver.findElement(By.name("btnLogin")).click();
-        Assertions.assertEquals("User or Password is not valid", getMessage());
+        login("mngr554d581", "aqejysU");
+        Assertions.assertEquals("User or Password is not valid", getAlertMessage());
     }
 
     @Test
+    @Order(3)
+    @DisplayName("TC3: Valid UserID and Invalid Password")
     public void testValidUseridAndInvalidPassword() {
-        driver.findElement(By.name("uid")).sendKeys("mngr554581");
-        driver.findElement(By.name("password")).sendKeys("aqedjysU");
-        driver.findElement(By.name("btnLogin")).click();
-        Assertions.assertEquals("User or Password is not valid", getMessage());
+        login("mngr554581", "aqedjysU");
+        Assertions.assertEquals("User or Password is not valid", getAlertMessage());
     }
 
     @Test
+    @Order(4)
+    @DisplayName("TC4: Invalid UserID and Invalid Password")
     public void testInvalidUseridAndInvalidPassword() {
-        driver.findElement(By.name("uid")).sendKeys("mngrfd554581");
-        driver.findElement(By.name("password")).sendKeys("aqedsdjysU");
+        login("mngrfd554581", "aqedsdjysU");
+        Assertions.assertEquals("User or Password is not valid", getAlertMessage());
+    }
+
+    private void login(String userID, String password) {
+        driver.findElement(By.name("uid")).sendKeys(userID);
+        driver.findElement(By.name("password")).sendKeys(password);
         driver.findElement(By.name("btnLogin")).click();
-        Assertions.assertEquals("User or Password is not valid", getMessage());
     }
 
-
-    @AfterEach
-    public void close() {
-        driver.quit();
+    private String getAlertMessage() {
+        return driver.switchTo().alert().getText();
     }
+
 }

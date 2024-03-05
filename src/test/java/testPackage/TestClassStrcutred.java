@@ -47,8 +47,8 @@ public class TestClassStrcutred {
     public void checkForGoogleTitleAndURL()  {
         var title =  driver.getTitle();
         var currentURL =  driver.getCurrentUrl();
-        Assertions.assertEquals("Google",title);
-        Assertions.assertEquals("https://www.google.com/",currentURL);
+        Assertions.assertEquals("Web form",title);
+        Assertions.assertEquals("https://www.selenium.dev/selenium/web/web-form.html",currentURL);
     }
 
 
